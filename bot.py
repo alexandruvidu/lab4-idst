@@ -21,6 +21,7 @@ import code
 import os
 import inspect
 import random
+import argparse
 
 from discord.ext import commands
 from discord.player import AudioSource
@@ -169,9 +170,17 @@ async def scram_error(ctx, error):
 ################################################################################
 
 if __name__ == '__main__':
-    if 'BOT_TOKEN' not in os.environ:
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--token', nargs='?')
+    args = parser.parse_args()
+
+    if args.token is not None:
+        token = args.token
+    elif 'BOT_TOKEN' in os.environ:
+        token = os.environ['BOT_TOKEN']
+    else:
         log_msg('save your token in the BOT_TOKEN env variable!', 'error')
         exit(-1)
 
-    bot.run(os.environ['BOT_TOKEN'])
-    
+    bot.run(token)
